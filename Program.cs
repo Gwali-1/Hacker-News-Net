@@ -12,11 +12,14 @@ namespace FrontPage
     public class Story
     {
         public string By { get; set; }
-        public string Score { get; set; }
-        public string   descendants { get; set; }
+        public int Score { get; set; }
+        public int   descendants { get; set; }
+        public List<int> kids { get; set; }
         public string title { get; set; }
         public string Type { get; set; }
         public string Url { get; set; }
+        public int time { get; set; }
+        public int id { get; set; }
     }
 
 
@@ -31,10 +34,15 @@ namespace FrontPage
                 string url = $"https://hacker-news.firebaseio.com/v0/item/{id.Trim()}.json?print=pretty";
                 HttpResponseMessage story = await new HttpClient().GetAsync(url);
                 string jsonResponse = await story.Content.ReadAsStringAsync();
-                Console.WriteLine(jsonResponse);
                 Story? storyInfo = JsonConvert.DeserializeObject<Story>(jsonResponse);
                 Console.WriteLine(storyInfo.title);
-                
+                Console.WriteLine(storyInfo.id);
+                Console.WriteLine(storyInfo.title);
+                Console.WriteLine(storyInfo.kids);
+                Console.WriteLine(storyInfo.title);
+
+
+
             }
         }
 
