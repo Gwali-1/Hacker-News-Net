@@ -1,5 +1,9 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
 namespace FrontPage;
 
 public class HackerNews
@@ -7,13 +11,12 @@ public class HackerNews
     private readonly HttpClient client =  new HttpClient();
     private readonly string topStoriesUrl = "https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty";
     private readonly string jobStoriesUrl = "https://hacker-news.firebaseio.com/v0/jobstories.json?print=pretty";
+    private readonly string newStoriesUrl = "https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty";
+    private readonly string bestStoriesUrl = "https://hacker-news.firebaseio.com/v0/beststories.json?print=pretty";
 
 
 
-    public HackerNews()
-    {
-    }
-
+    //search item
     public static async Task<string> SearchItem(string id)
     {
         string SearchItemUrl = $"https://hacker-news.firebaseio.com/v0/item/{id.Trim()}.json?print=pretty";
@@ -42,6 +45,9 @@ public class HackerNews
 
     }
 
+    //get comments of story
+
+
 
 
     private async Task<List<Story>> getStoryInfoAndReturnObjects(List<string> ids)
@@ -54,7 +60,7 @@ public class HackerNews
             HttpResponseMessage story = await client.GetAsync(url);
             string jsonResponse =  await story.Content.ReadAsStringAsync();
           
-            Story StoryObject = JsonConvert.DeserializeObject<Story>(jsonResponse);
+            Story? StoryObject = JsonConvert.DeserializeObject<Story>(jsonResponse);
             if (StoryObject == null)
             {
                 continue;
@@ -115,6 +121,7 @@ public class HackerNews
         {
             return "{}";
         }
+
         using (client)
         {
 
@@ -143,9 +150,53 @@ public class HackerNews
     }
 
 
+
+    //top stories objects
+    public async Task<List<Story>> TopStoriesObjects(int number)
+    {
+
+        if (number < 1)
+        {
+            return new List<Story> { };
+        }
+
+        using (client)
+        {
+            try
+            {
+
+                HttpResponseMessage response = await client.GetAsync(this.topStoriesUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    string cleanedREsponse = jsonResponse.Trim().Substring(1, jsonResponse.Length - 3);
+                    List<string> storyIDs = cleanedREsponse.Split(",").ToList().GetRange(0, number);
+                    return await this.getStoryInfoAndReturnObjects(storyIDs);
+
+                }
+                return new List<Story> { };
+
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine(e);
+                return new List<Story> { };
+            }
+
+        }
+
+    }
+
+
+
     //job stroies
     public async Task<string> JobStoriesJson(int number)
     {
+        if(number < 1)
+        {
+            return "{}";
+        }
+
         using (client)
         {
             try
@@ -172,44 +223,134 @@ public class HackerNews
 
     }
 
-
-    //top stories objects
-    public async Task<List<Story>> TopStoriesObjects(int number)
+    //new stories
+    public async Task<string> NewStoriesJson(int number)
     {
-
         if (number < 1)
         {
-            return new List<Story>{ };
+            return "{}";
         }
+
+
         using (client)
         {
             try
             {
-
-                HttpResponseMessage response = await client.GetAsync(this.topStoriesUrl);
+                HttpResponseMessage response = await client.GetAsync(this.newStoriesUrl);
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    string cleanedREsponse = jsonResponse.Trim().Substring(1, jsonResponse.Length - 3);
-                    List<string> storyIDs = cleanedREsponse.Split(",").ToList().GetRange(0, number);
-                    return await this.getStoryInfoAndReturnObjects(storyIDs);
-
+                    string cleaned = this.cleanResponse(jsonResponse);
+                    List<string> storyIDs = cleaned.Split(",").ToList().GetRange(0, number);
+                    return await this.getStoryInfoAndReturnJsonFormat(storyIDs);
                 }
-                return new List<Story> { };
-               
+
+                return "StatusCode: " + response.StatusCode;
+
             }
             catch (HttpRequestException e)
             {
                 Console.WriteLine(e);
-                return new List<Story> { };
+                return "{}";
             }
 
         }
-        
+
     }
 
+    //best stories
+    public async Task<string> BestStoriesJson(int number)
+    {
+        if (number < 1)
+        {
+            return "{}";
+        }
 
 
+        using (client)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(this.bestStoriesUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    string cleaned = this.cleanResponse(jsonResponse);
+                    List<string> storyIDs = cleaned.Split(",").ToList().GetRange(0, number);
+                    return await this.getStoryInfoAndReturnJsonFormat(storyIDs);
+                }
+
+                return "StatusCode: " + response.StatusCode;
+
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine(e);
+                return "{}";
+            }
+
+        }
+
+    }
+
+    //comments of story/ with ranging
+    public async Task<string> GetComments(string itemId, int offset, int limit)
+    {
+        if (offset < 0 || limit < 1)
+        {
+            return "{}";
+        }
+
+
+        string storyJson = await SearchItem(itemId);
+        Story? storyObject = JsonConvert.DeserializeObject<Story>(storyJson);
+        if(storyObject == null)
+        {
+            return "{}";
+        }
+        List<string>? commentIds = storyObject.Kids;
+        if (commentIds == null)
+        {
+            return "{}";
+        }
+        try
+        {
+            List<string> commentIdRanged = commentIds.GetRange(offset, limit);
+            Console.WriteLine(commentIdRanged.Count);
+            return await this.getStoryInfoAndReturnJsonFormat(commentIdRanged);
+        }
+        catch (ArgumentOutOfRangeException e)
+        {
+            Console.WriteLine(e);
+            return "{}";
+        }
+       
+        
+
+        
+  
+
+    }
+
+    //overload get comment no ranging
+    public async Task<string> GetComments(string itemId)
+    {
+        string storyJson = await SearchItem(itemId);
+        Story? storyObject = JsonConvert.DeserializeObject<Story>(storyJson);
+        if (storyObject == null)
+        {
+            return "{}";
+        }
+        List<string>? commentIds = storyObject.Kids;
+        if (commentIds == null)
+        {
+            return "{}";
+        }
+  
+        return await this.getStoryInfoAndReturnJsonFormat(commentIds);
+
+
+    }
 
 
 

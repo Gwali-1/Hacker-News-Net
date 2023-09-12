@@ -5,7 +5,7 @@
         public string? By { get; set; }
         public int Score { get; set; }
         public int descendants { get; set; }
-        public List<int>? Kids { get; set; }
+        public List<string>? Kids { get; set; }
         public string? Title { get; set; }
         public string? Type { get; set; }
         public string? Url { get; set; }

@@ -5,7 +5,7 @@
         static async Task Main(string[] args)
         {
             HackerNews hn = new HackerNews();
-            var r = await hn.JobStoriesJson(2);
+            var r = await hn.GetComments("8863", 0,2);
 
             Console.WriteLine(r);
 
