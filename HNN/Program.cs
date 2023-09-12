@@ -5,11 +5,13 @@
         static async Task Main(string[] args)
         {
             HackerNews hn = new HackerNews();
-            var r = await hn.TopStoriesJson(0);
+            var r = await hn.JobStoriesJson(2);
 
             Console.WriteLine(r);
-            Console.ReadLine();
 
+
+            //var t = await HackerNews.SearchItem("8917");        
+            Console.ReadLine();
         }
     }
 
