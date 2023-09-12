@@ -107,11 +107,13 @@ public class HackerNews
 
 
 
-    private string cleanResponse(string response)
+
+    private string CleanResponse(string response)
     {
         return response.Trim().Substring(1, response.Length - 3);
      
     }
+
 
 
     //top stories
@@ -132,7 +134,7 @@ public class HackerNews
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    string cleaned = this.cleanResponse(jsonResponse);
+                    string cleaned = this.CleanResponse(jsonResponse);
                     List<string> storyIDs = cleaned.Split(",").ToList().GetRange(0, number);
                     return await this.getStoryInfoAndReturnJsonFormat(storyIDs);
 
@@ -205,7 +207,7 @@ public class HackerNews
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    string cleaned = this.cleanResponse(jsonResponse);
+                    string cleaned = this.CleanResponse(jsonResponse);
                     List<string> storyIDs = cleaned.Split(",").ToList().GetRange(0, number);
                     return await this.getStoryInfoAndReturnJsonFormat(storyIDs);
                 }
@@ -240,7 +242,7 @@ public class HackerNews
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    string cleaned = this.cleanResponse(jsonResponse);
+                    string cleaned = this.CleanResponse(jsonResponse);
                     List<string> storyIDs = cleaned.Split(",").ToList().GetRange(0, number);
                     return await this.getStoryInfoAndReturnJsonFormat(storyIDs);
                 }
@@ -275,7 +277,7 @@ public class HackerNews
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    string cleaned = this.cleanResponse(jsonResponse);
+                    string cleaned = this.CleanResponse(jsonResponse);
                     List<string> storyIDs = cleaned.Split(",").ToList().GetRange(0, number);
                     return await this.getStoryInfoAndReturnJsonFormat(storyIDs);
                 }
