@@ -147,6 +147,11 @@ public class HackerNews
                 Console.WriteLine(e);
                 return "{}";
             }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e);
+                return "{}";
+            }
 
 
         }
@@ -187,6 +192,11 @@ public class HackerNews
                 return new List<Story> { };
             }
             catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e);
+                return new List<Story> { };
+            }
+            catch (ArgumentException e)
             {
                 Console.WriteLine(e);
                 return new List<Story> { };
@@ -235,6 +245,11 @@ public class HackerNews
                 Console.WriteLine(e);
                 return "{}";
             }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e);
+                return "{}";
+            }
 
         }
 
@@ -271,6 +286,11 @@ public class HackerNews
                 return "{}";
             }
             catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e);
+                return "{}";
+            }
+            catch (ArgumentException e)
             {
                 Console.WriteLine(e);
                 return "{}";
@@ -315,6 +335,11 @@ public class HackerNews
                 Console.WriteLine(e);
                 return "{}";
             }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e);
+                return "{}";
+            }
 
         }
 
@@ -344,19 +369,23 @@ public class HackerNews
         try
         {
             List<string> commentIdRanged = commentIds.GetRange(offset, limit);
-            Console.WriteLine(commentIdRanged.Count);
-            return await GetStoryInfoAndReturnJsonFormat(commentIdRanged);
+\            return await GetStoryInfoAndReturnJsonFormat(commentIdRanged);
         }
         catch (ArgumentOutOfRangeException e)
         {
             Console.WriteLine(e);
             return "{}";
         }
-       
-        
+        catch (ArgumentException e)
+        {
+            Console.WriteLine(e);
+            return "{}";
+        }
 
-        
-  
+
+
+
+
 
     }
 
