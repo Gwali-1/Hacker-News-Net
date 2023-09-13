@@ -1,4 +1,4 @@
-﻿namespace FrontPage
+﻿namespace Hacker_news_net
 {
     public class Story
     {
