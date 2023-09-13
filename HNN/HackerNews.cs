@@ -50,13 +50,13 @@ public class HackerNews
 
 
 
-    private async Task<List<Story>> getStoryInfoAndReturnObjects(List<string> ids)
+    private async Task<List<Story>> GetStoryInfoAndReturnObjects(List<string> ids)
     {
         List<Story> stories = new List<Story>();
 
         foreach (var id in ids)
         {
-            string url = $"https://hacker-news.firebaseio.com/v0/item/{ids[0].Trim()}.json?print=pretty";
+            string url = $"https://hacker-news.firebaseio.com/v0/item/{id.Trim()}.json?print=pretty";
             HttpResponseMessage story = await client.GetAsync(url);
             string jsonResponse =  await story.Content.ReadAsStringAsync();
           
@@ -173,7 +173,7 @@ public class HackerNews
                     string jsonResponse = await response.Content.ReadAsStringAsync();
                     string cleanedREsponse = jsonResponse.Trim().Substring(1, jsonResponse.Length - 3);
                     List<string> storyIDs = cleanedREsponse.Split(",").ToList().GetRange(0, number);
-                    return await this.getStoryInfoAndReturnObjects(storyIDs);
+                    return await this.GetStoryInfoAndReturnObjects(storyIDs);
 
                 }
                 return new List<Story> { };
