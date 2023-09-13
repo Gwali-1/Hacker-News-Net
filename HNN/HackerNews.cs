@@ -13,6 +13,8 @@ public class HackerNews
 
 
 
+
+
     //search item
     public static async Task<string> SearchItem(string id)
     {
@@ -42,7 +44,8 @@ public class HackerNews
 
     }
 
-    //get comments of story
+
+
 
 
 
@@ -64,11 +67,13 @@ public class HackerNews
             }
             stories.Add(StoryObject);
         }
-        return stories;
-
-      
+        return stories; 
         
     }
+
+
+
+
 
 
     private async Task<string> GetStoryInfoAndReturnJsonFormat(List<string> ids)
@@ -104,11 +109,16 @@ public class HackerNews
 
 
 
+
+
     private static string CleanResponse(string response)
     {
         return response.Trim().Substring(1, response.Length - 3);
      
     }
+
+
+
 
 
 
@@ -160,6 +170,10 @@ public class HackerNews
 
 
 
+
+
+
+
     //top stories objects
     public async Task<List<Story>> TopStoriesObjects(int number)
     {
@@ -205,6 +219,8 @@ public class HackerNews
         }
 
     }
+
+
 
 
 
@@ -255,6 +271,11 @@ public class HackerNews
 
     }
 
+
+
+
+
+
     //new stories
     public async Task<string> NewStoriesJson(int number)
     {
@@ -299,6 +320,12 @@ public class HackerNews
         }
 
     }
+
+
+
+
+
+
 
     //best stories
     public async Task<string> BestStoriesJson(int number)
@@ -345,7 +372,14 @@ public class HackerNews
 
     }
 
-    //comments of story/ with ranging
+
+
+
+
+
+
+
+    //comments
     public async Task<string> GetComments(string itemId, int offset, int limit)
     {
         if (offset < 0 || limit < 1)
@@ -369,7 +403,7 @@ public class HackerNews
         try
         {
             List<string> commentIdRanged = commentIds.GetRange(offset, limit);
-\            return await GetStoryInfoAndReturnJsonFormat(commentIdRanged);
+            return await GetStoryInfoAndReturnJsonFormat(commentIdRanged);
         }
         catch (ArgumentOutOfRangeException e)
         {
@@ -389,7 +423,15 @@ public class HackerNews
 
     }
 
-    //overload get comment no ranging
+
+
+
+
+
+
+
+
+    //overload comment
     public async Task<string> GetComments(string itemId)
     {
         string storyJson = await SearchItem(itemId);
