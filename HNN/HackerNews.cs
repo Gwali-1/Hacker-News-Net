@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FrontPage;
 
@@ -74,9 +71,8 @@ public class HackerNews
     }
 
 
-    private async Task<string> getStoryInfoAndReturnJsonFormat(List<string> ids)
+    private async Task<string> GetStoryInfoAndReturnJsonFormat(List<string> ids)
     {
-        List<Story> stories = new List<Story>();
         var storyJSon = new StringBuilder();
         storyJSon.AppendLine("[");
 
@@ -102,13 +98,13 @@ public class HackerNews
             storyJSon.AppendLine(jsonResponse + ",");
         }
 
-        return storyJSon.Append("]").ToString();
+        return storyJSon.Append(']').ToString();
     }
 
 
 
 
-    private string CleanResponse(string response)
+    private static string CleanResponse(string response)
     {
         return response.Trim().Substring(1, response.Length - 3);
      
@@ -134,9 +130,9 @@ public class HackerNews
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    string cleaned = this.CleanResponse(jsonResponse);
+                    string cleaned = CleanResponse(jsonResponse);
                     List<string> storyIDs = cleaned.Split(",").ToList().GetRange(0, number);
-                    return await this.getStoryInfoAndReturnJsonFormat(storyIDs);
+                    return await this.GetStoryInfoAndReturnJsonFormat(storyIDs);
 
                 }
                 return "StatusCode: " + response.StatusCode;
@@ -146,6 +142,12 @@ public class HackerNews
                 Console.WriteLine(e);
                 return "{}";
             }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e);
+                return "{}";
+            }
+
 
         }
 
@@ -184,6 +186,11 @@ public class HackerNews
                 Console.WriteLine(e);
                 return new List<Story> { };
             }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e);
+                return new List<Story> { };
+            }
 
         }
 
@@ -207,9 +214,12 @@ public class HackerNews
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    string cleaned = this.CleanResponse(jsonResponse);
+                    string cleaned = CleanResponse(jsonResponse);
+  
                     List<string> storyIDs = cleaned.Split(",").ToList().GetRange(0, number);
-                    return await this.getStoryInfoAndReturnJsonFormat(storyIDs);
+                    return await this.GetStoryInfoAndReturnJsonFormat(storyIDs);
+               
+                  
                 }
 
                 return "StatusCode: " + response.StatusCode;
@@ -220,7 +230,12 @@ public class HackerNews
                 Console.WriteLine(e);
                 return "{}";
             }
-           
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e);
+                return "{}";
+            }
+
         }
 
     }
@@ -242,15 +257,20 @@ public class HackerNews
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    string cleaned = this.CleanResponse(jsonResponse);
+                    string cleaned = CleanResponse(jsonResponse);
                     List<string> storyIDs = cleaned.Split(",").ToList().GetRange(0, number);
-                    return await this.getStoryInfoAndReturnJsonFormat(storyIDs);
+                    return await this.GetStoryInfoAndReturnJsonFormat(storyIDs);
                 }
 
                 return "StatusCode: " + response.StatusCode;
 
             }
             catch (HttpRequestException e)
+            {
+                Console.WriteLine(e);
+                return "{}";
+            }
+            catch (ArgumentOutOfRangeException e)
             {
                 Console.WriteLine(e);
                 return "{}";
@@ -277,15 +297,20 @@ public class HackerNews
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    string cleaned = this.CleanResponse(jsonResponse);
+                    string cleaned = CleanResponse(jsonResponse);
                     List<string> storyIDs = cleaned.Split(",").ToList().GetRange(0, number);
-                    return await this.getStoryInfoAndReturnJsonFormat(storyIDs);
+                    return await this.GetStoryInfoAndReturnJsonFormat(storyIDs);
                 }
 
                 return "StatusCode: " + response.StatusCode;
 
             }
             catch (HttpRequestException e)
+            {
+                Console.WriteLine(e);
+                return "{}";
+            }
+            catch (ArgumentOutOfRangeException e)
             {
                 Console.WriteLine(e);
                 return "{}";
@@ -315,11 +340,12 @@ public class HackerNews
         {
             return "{}";
         }
+
         try
         {
             List<string> commentIdRanged = commentIds.GetRange(offset, limit);
             Console.WriteLine(commentIdRanged.Count);
-            return await this.getStoryInfoAndReturnJsonFormat(commentIdRanged);
+            return await GetStoryInfoAndReturnJsonFormat(commentIdRanged);
         }
         catch (ArgumentOutOfRangeException e)
         {
@@ -349,12 +375,10 @@ public class HackerNews
             return "{}";
         }
   
-        return await this.getStoryInfoAndReturnJsonFormat(commentIds);
+        return await GetStoryInfoAndReturnJsonFormat(commentIds);
 
 
     }
-
-
 
 
 
