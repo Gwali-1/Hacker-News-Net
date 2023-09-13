@@ -194,7 +194,7 @@ public class HackerNews
                     string jsonResponse = await response.Content.ReadAsStringAsync();
                     string cleanedREsponse = jsonResponse.Trim().Substring(1, jsonResponse.Length - 3);
                     List<string> storyIDs = cleanedREsponse.Split(",").ToList().GetRange(0, number);
-                    return await this.GetStoryInfoAndReturnObjects(storyIDs);
+                    return await GetStoryInfoAndReturnObjects(storyIDs);
 
                 }
                 return new List<Story> { };
