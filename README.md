@@ -2,8 +2,8 @@
 This is a .Net client package to the Hacker News API.
 You can interact with the Api through  six(6) public instance methods and a static method
 to retrieve informations like best stories , job stories, comments on a post etc
-## Methods 
-- TopStoriesJson 
+## Methods
+- TopStoriesJson
 - TopStoriesObjects
 - JobStoriesJson
 - NewStoriesJson
@@ -14,7 +14,7 @@ to retrieve informations like best stories , job stories, comments on a post etc
 
 The Hacker News API is faily minimal and easy to use, this client mostly does the work of exposing easy to call methods and the convenience of returning to you a collection of json instead of a list
 of story ids as most endpoints do.
-There is also a method `(TopStoriesObjects)` which  returns a collection of stories as a collection of iterative native objects(`story`) for easy access and information retrieval. 
+There is also a method `(TopStoriesObjects)` which  returns a collection of stories as a collection of iterative native objects(`story`) for easy access and information retrieval.
 
 
 ## Installation
@@ -28,7 +28,7 @@ or just add package in the `Visual Studio`
 ## Basic usage
 
 ```csharp
-using HackerNewsApiClient;
+using Hacker-News-Net;
 
 //get top 10 stories
 HackerNews hn  = new HackerNews();
